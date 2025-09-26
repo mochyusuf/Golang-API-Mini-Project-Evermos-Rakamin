@@ -42,12 +42,10 @@ func (h *AuthHandler) Register(c *fiber.Ctx) error {
 		return util.JSONResponse(c, http.StatusBadRequest, "Invalid request body", err.Error(), nil)
 	}
 
-	token, err := h.authService.Register(c.Context(), request)
+	responseRegis, err := h.authService.Register(c.Context(), request)
 	if err != nil {
 		return util.JSONResponse(c, http.StatusInternalServerError, "Registration failed", err.Error(), nil)
 	}
 
-	data := map[string]string{"token": token}
-
-	return util.JSONResponse(c, http.StatusCreated, "Registration successful", nil, data)
+	return util.JSONResponse(c, http.StatusCreated, "Registration successful", nil, responseRegis)
 }

@@ -20,17 +20,20 @@ func BuildPrivateRoutes(db *gorm.DB, cfg *config.Config) []*router.Route {
 	alamatService := service.NewAlamatService(cfg, alamatRepository)
 	alamatHandler := handler.NewAlamatHandler(alamatService)
 
+	tokoRepository := repository.NewTokoRepository(db)
+	tokoService := service.NewTokoService(cfg, tokoRepository)
+	tokoHandler := handler.NewTokoHandler(tokoService)
 
-	return router.PrivateRoutes(userHandler, alamatHandler)
+	return router.PrivateRoutes(userHandler, alamatHandler, tokoHandler)
 }
 
 func BuildPublicRoutes(db *gorm.DB, cfg *config.Config) []*router.Route {
 	userRepository := repository.NewUserRepository(db)
-	
+	tokoRepository := repository.NewTokoRepository(db)
 
 	// Initialize services
 	
-	authService := service.NewAuthService(cfg, userRepository)
+	authService := service.NewAuthService(cfg, userRepository, tokoRepository)
 	userService := service.NewUserService(cfg, userRepository)
 
 

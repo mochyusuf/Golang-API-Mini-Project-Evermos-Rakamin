@@ -9,7 +9,7 @@ import (
 
 const (
 	Admin = "admin"
-	User = "user"
+	User  = "user"
 )
 
 var (
@@ -30,18 +30,29 @@ func PublicRoutes(AuthHandler *handler.AuthHandler, UserHandler *handler.UserHan
 		{Method: http.MethodPost, Path: "/api/v1/auth/login", Handler: AuthHandler.Login, Roles: allRoles},
 		{Method: http.MethodPost, Path: "/api/v1/auth/register", Handler: AuthHandler.Register, Roles: allRoles},
 		{Method: http.MethodPost, Path: "/user/generate-password", Handler: UserHandler.GeneratePassword, Roles: onlyUser},
+		{Method: http.MethodPut, Path: "/api/v1/user/:id", Handler: UserHandler.UpdateUser, Roles: onlyAdmin},
 	}
 }
 
-func PrivateRoutes(UserHandler *handler.UserHandler, AlamatHandler *handler.AlamatHandler) []*Route {
+func PrivateRoutes(UserHandler *handler.UserHandler, AlamatHandler *handler.AlamatHandler, TokoHandler *handler.TokoHandler) []*Route {
 	return []*Route{
 		{Method: http.MethodGet, Path: "/api/v1/user", Handler: UserHandler.GetProfile, Roles: allRoles},
 		{Method: http.MethodPut, Path: "/api/v1/user", Handler: UserHandler.UpdateProfile, Roles: allRoles},
 		{Method: http.MethodGet, Path: "/api/v1/all-user", Handler: UserHandler.GetAllUser, Roles: allRoles},
+
+		// Alamat Routes
 		{Method: http.MethodGet, Path: "/api/v1/user/alamat", Handler: AlamatHandler.GetAlamatUser, Roles: allRoles},
 		{Method: http.MethodGet, Path: "/api/v1/user/alamat/:id", Handler: AlamatHandler.GetAlamatById, Roles: allRoles},
 		{Method: http.MethodPost, Path: "/api/v1/user/alamat", Handler: AlamatHandler.CreateAlamat, Roles: allRoles},
 		{Method: http.MethodPut, Path: "/api/v1/user/alamat/:id", Handler: AlamatHandler.UpdateAlamat, Roles: allRoles},
 		{Method: http.MethodDelete, Path: "/api/v1/user/alamat/:id", Handler: AlamatHandler.DeleteAlamat, Roles: allRoles},
+
+		// Toko Routes
+		{Method: http.MethodGet, Path: "/api/v1/toko/my", Handler: TokoHandler.GetMyToko, Roles: allRoles},
+		{Method: http.MethodGet, Path: "/api/v1/toko/:id_toko", Handler: TokoHandler.GetTokoByID, Roles: allRoles},
+		{Method: http.MethodGet, Path: "/api/v1/toko", Handler: TokoHandler.GetTokoPaginated, Roles: allRoles},
+		{Method: http.MethodPut, Path: "/api/v1/toko/:id_toko", Handler: TokoHandler.UpdateToko, Roles: allRoles},
+		{Method: http.MethodPut, Path: "/api/v1/toko/my", Handler: TokoHandler.UpdateToko, Roles: onlyUser},
 	}
 }
+

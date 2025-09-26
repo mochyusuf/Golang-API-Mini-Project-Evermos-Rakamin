@@ -1,12 +1,12 @@
 package service
 
 import (
+	"context"
 	"evermos_rakamin/internal/config"
 	"evermos_rakamin/internal/dto"
 	"evermos_rakamin/internal/entity"
 	"evermos_rakamin/internal/repository"
 	"evermos_rakamin/internal/util"
-	"context"
 	"time"
 
 	"golang.org/x/crypto/bcrypt"
@@ -19,11 +19,11 @@ type UserService interface {
 }
 
 type userService struct {
-	cfg        *config.Config
+	cfg      *config.Config
 	userRepo repository.UserRepository
 }
 
-func NewUserService(cfg *config.Config,userRepo repository.UserRepository) UserService {
+func NewUserService(cfg *config.Config, userRepo repository.UserRepository) UserService {
 	return &userService{cfg, userRepo}
 }
 
@@ -70,7 +70,7 @@ func (s *userService) UpdateProfile(ctx context.Context, id int64, req *dto.Upda
 	if err != nil {
 		return err
 	}
-	tanggalLahir, err := time.Parse("2001-01-01", *req.TanggalLahir)
+	tanggalLahir, err := time.Parse("02/01/2006", *req.TanggalLahir)
 
 	if req.Nama != nil {
 		user.Nama = *req.Nama
@@ -111,7 +111,6 @@ func (s *userService) UpdateProfile(ctx context.Context, id int64, req *dto.Upda
 
 	return s.userRepo.Update(ctx, user)
 }
-
 
 func (s *userService) GetAllUsers(ctx context.Context) ([]entity.User, error) {
 	return s.userRepo.FindAll(ctx)

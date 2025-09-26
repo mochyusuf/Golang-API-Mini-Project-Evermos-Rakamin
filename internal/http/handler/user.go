@@ -86,3 +86,19 @@ func (h *UserHandler) UpdateProfile(c *fiber.Ctx) error {
 
 	return util.JSONResponse(c, http.StatusOK, "Profile updated successfully", nil, nil)
 }
+
+func (h *UserHandler) UpdateUser(c *fiber.Ctx) error {
+	id, err := c.ParamsInt("id")
+	var request dto.UpdateUserRequest
+
+	if err := c.BodyParser(&request); err != nil {
+		return util.JSONResponse(c, http.StatusBadRequest, "Invalid request body", err.Error(), nil)
+	}
+
+	err = h.userService.UpdateProfile(c.Context(), int64(id), &request)
+	if err != nil {
+		return util.JSONResponse(c, http.StatusInternalServerError, "Failed to update user", err.Error(), nil)
+	}
+
+	return util.JSONResponse(c, http.StatusOK, "User updated successfully", nil, nil)
+}

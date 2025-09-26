@@ -42,3 +42,11 @@ type LoginResponse struct {
 	IdKota       City     `json:"id_kota"`
 	Token        string   `json:"token"`
 }
+
+type RegisterResponse struct {
+	ID     int64  `json:"id"`
+	Nama   string `json:"nama"`
+	NoTelp string `json:"no_telp"`
+	Email  string `json:"email"`
+	Token  string `json:"token"`
+}
