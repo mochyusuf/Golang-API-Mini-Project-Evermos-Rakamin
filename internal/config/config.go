@@ -8,7 +8,7 @@ import (
 type Config struct {
 	Env 		string			`env:"ENV" evDefault:"dev"`
 	Host    	string	        `env:"HOST" envDefault:"localhost"`
-	Port		string			`env:"PORT" envDefault:"8080"`
+	Port		string			`env:"PORT" envDefault:"8000"`
 	Mysql     	MysqlConfig		`envPrefix:"mysql_"`
 	JWTSecretKey string 		`env:"JWT_SECRET_KEY" envDefault:"jwt"`
 }

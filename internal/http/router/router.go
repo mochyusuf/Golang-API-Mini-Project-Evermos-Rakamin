@@ -34,8 +34,7 @@ func PublicRoutes(AuthHandler *handler.AuthHandler, UserHandler *handler.UserHan
 	}
 }
 
-func PrivateRoutes(UserHandler *handler.UserHandler, AlamatHandler *handler.AlamatHandler, TokoHandler *handler.TokoHandler) []*Route {
-	return []*Route{
+func PrivateRoutes(UserHandler *handler.UserHandler, AlamatHandler *handler.AlamatHandler, TokoHandler *handler.TokoHandler, CategoryHandler *handler.CategoryHandler) []*Route {	return []*Route{
 		{Method: http.MethodGet, Path: "/api/v1/user", Handler: UserHandler.GetProfile, Roles: allRoles},
 		{Method: http.MethodPut, Path: "/api/v1/user", Handler: UserHandler.UpdateProfile, Roles: allRoles},
 		{Method: http.MethodGet, Path: "/api/v1/all-user", Handler: UserHandler.GetAllUser, Roles: allRoles},
@@ -52,7 +51,13 @@ func PrivateRoutes(UserHandler *handler.UserHandler, AlamatHandler *handler.Alam
 		{Method: http.MethodGet, Path: "/api/v1/toko/:id_toko", Handler: TokoHandler.GetTokoByID, Roles: allRoles},
 		{Method: http.MethodGet, Path: "/api/v1/toko", Handler: TokoHandler.GetTokoPaginated, Roles: allRoles},
 		{Method: http.MethodPut, Path: "/api/v1/toko/:id_toko", Handler: TokoHandler.UpdateToko, Roles: allRoles},
-		{Method: http.MethodPut, Path: "/api/v1/toko/my", Handler: TokoHandler.UpdateToko, Roles: onlyUser},
+		
+		// Category Routes
+		{Method: http.MethodGet, Path: "/api/v1/category", Handler: CategoryHandler.GetAllCategories, Roles: allRoles},
+		{Method: http.MethodGet, Path: "/api/v1/category/:id", Handler: CategoryHandler.GetCategoryByID, Roles: allRoles},
+		{Method: http.MethodPost, Path: "/api/v1/category", Handler: CategoryHandler.CreateCategory, Roles: onlyAdmin},
+		{Method: http.MethodPut, Path: "/api/v1/category/:id", Handler: CategoryHandler.UpdateCategory, Roles: onlyAdmin},
+		{Method: http.MethodDelete, Path: "/api/v1/category/:id", Handler: CategoryHandler.DeleteCategory, Roles: onlyAdmin},
 	}
 }
 

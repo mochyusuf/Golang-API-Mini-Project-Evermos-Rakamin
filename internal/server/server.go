@@ -4,12 +4,15 @@ import (
 	"evermos_rakamin/internal/config"
 	"evermos_rakamin/internal/common"
 	"evermos_rakamin/internal/http/router"
+	"evermos_rakamin/internal/util"
 	"context"
 	"fmt"
 	"log"
 	"os"
 	"os/signal"
 	"time"
+	"net/http"
+    "errors"
 
 	"github.com/gofiber/fiber/v2"
 	jwtware "github.com/gofiber/jwt/v3"
@@ -30,7 +33,18 @@ func NewServer(cfg *config.Config, publicRoutes, privateRoutes []*router.Route) 
 
 	// Register Private Routes with JWT Middleware
 	for _, v := range privateRoutes {
-		app.Add(v.Method, v.Path, JWTMiddleware(cfg.JWTSecretKey), v.Handler)
+		if v.Roles[0] == "admin" && len(v.Roles) == 1{
+			app.Add(v.Method, v.Path, JWTMiddleware(cfg.JWTSecretKey), 
+				func(ctx *fiber.Ctx) error {
+					err := CheckIsAdmin(ctx, cfg.JWTSecretKey)
+					if err != nil {
+						return util.JSONResponse(ctx, http.StatusUnauthorized, "Unauthorized", err, nil)
+					}
+					return ctx.Next()
+				}, v.Handler)
+		} else {
+			app.Add(v.Method, v.Path, JWTMiddleware(cfg.JWTSecretKey), v.Handler)
+		}
 	}
 	return &Server{app, cfg}
 }
@@ -62,12 +76,33 @@ func (s *Server) GracefulShutdown() {
 	fmt.Println("Server exited gracefully")
 }
 
+
+func CheckIsAdmin(ctx *fiber.Ctx, secretKey string) error {
+	token := ctx.Get("token")
+
+	if token == "" {
+		return errors.New("token empty")
+	}
+
+	claims, err := util.DecodeJWT(token, secretKey)
+	if err != nil {
+		return errors.New("unauthenticated")
+	}
+
+	isAdmin := claims["is_admin"]
+	if isAdmin == false {
+		return errors.New("Not Admin")
+	}
+	return nil
+}
+
 func JWTMiddleware(secretKey string) fiber.Handler {
 	return jwtware.New(jwtware.Config{
 		SigningKey:   []byte(secretKey),
 		ContextKey:   "user",
 		Claims:       &common.JwtCustomClaims{},
 		ErrorHandler: jwtError,
+		TokenLookup: "header:token",
 	})
 }
 
