@@ -34,7 +34,7 @@ func PublicRoutes(AuthHandler *handler.AuthHandler, UserHandler *handler.UserHan
 	}
 }
 
-func PrivateRoutes(UserHandler *handler.UserHandler, AlamatHandler *handler.AlamatHandler, TokoHandler *handler.TokoHandler, CategoryHandler *handler.CategoryHandler) []*Route {	return []*Route{
+func PrivateRoutes(UserHandler *handler.UserHandler, AlamatHandler *handler.AlamatHandler, TokoHandler *handler.TokoHandler, CategoryHandler *handler.CategoryHandler, ProdukHandler *handler.ProdukHandler) []*Route {	return []*Route{
 		{Method: http.MethodGet, Path: "/api/v1/user", Handler: UserHandler.GetProfile, Roles: allRoles},
 		{Method: http.MethodPut, Path: "/api/v1/user", Handler: UserHandler.UpdateProfile, Roles: allRoles},
 		{Method: http.MethodGet, Path: "/api/v1/all-user", Handler: UserHandler.GetAllUser, Roles: allRoles},
@@ -58,6 +58,13 @@ func PrivateRoutes(UserHandler *handler.UserHandler, AlamatHandler *handler.Alam
 		{Method: http.MethodPost, Path: "/api/v1/category", Handler: CategoryHandler.CreateCategory, Roles: onlyAdmin},
 		{Method: http.MethodPut, Path: "/api/v1/category/:id", Handler: CategoryHandler.UpdateCategory, Roles: onlyAdmin},
 		{Method: http.MethodDelete, Path: "/api/v1/category/:id", Handler: CategoryHandler.DeleteCategory, Roles: onlyAdmin},
+
+		// Produk Routes
+		{Method: http.MethodGet, Path: "/api/v1/product", Handler: ProdukHandler.GetAllProduk, Roles: allRoles},
+		{Method: http.MethodGet, Path: "/api/v1/product/:id", Handler: ProdukHandler.GetProdukByID, Roles: allRoles},
+		{Method: http.MethodPost, Path: "/api/v1/product", Handler: ProdukHandler.CreateProduk, Roles: onlyUser},
+		{Method: http.MethodPut, Path: "/api/v1/product/:id", Handler: ProdukHandler.UpdateProduk, Roles: onlyUser},
+		{Method: http.MethodDelete, Path: "/api/v1/product/:id", Handler: ProdukHandler.DeleteProduk, Roles: onlyUser},
 	}
 }
 

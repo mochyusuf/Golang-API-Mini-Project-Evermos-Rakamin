@@ -11,6 +11,8 @@ import (
 )
 
 func BuildPrivateRoutes(db *gorm.DB, cfg *config.Config) []*router.Route {
+	fotoRepository := repository.NewFotoProdukRepository(db)
+
 	userRepository := repository.NewUserRepository(db)
 	userService := service.NewUserService(cfg, userRepository)
 	userHandler := handler.NewUserHandler(userService)
@@ -26,8 +28,12 @@ func BuildPrivateRoutes(db *gorm.DB, cfg *config.Config) []*router.Route {
 	categoryRepository := repository.NewCategoryRepository(db)
 	categoryService := service.NewCategoryService(categoryRepository)
 	categoryHandler := handler.NewCategoryHandler(categoryService)
-
-	return router.PrivateRoutes(userHandler, alamatHandler, tokoHandler, categoryHandler)
+	
+	produkRepository := repository.NewProdukRepository(db)
+	produkService := service.NewProdukService(produkRepository, fotoRepository)
+	produkHandler := handler.NewProdukHandler(produkService)
+	
+	return router.PrivateRoutes(userHandler, alamatHandler, tokoHandler, categoryHandler, produkHandler)
 }
 
 func BuildPublicRoutes(db *gorm.DB, cfg *config.Config) []*router.Route {

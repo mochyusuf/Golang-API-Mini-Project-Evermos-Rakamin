@@ -25,6 +25,15 @@ func UploadFileToko(ctx *fiber.Ctx, file *multipart.FileHeader, fileName string)
 	return fileName, nil
 }
 
+func UploadFileProduk(ctx *fiber.Ctx, file *multipart.FileHeader, fileName string) (string, error) {
+	NewfileName := replaceFileName(fileName)
+	if err := ctx.SaveFile(file, fmt.Sprintf("./%s/produk/%s", imageDir, NewfileName)); err != nil {
+		return "", err
+	}
+
+	return fileName, nil
+}
+
 func replaceFileName(filename string) string {
 	newName := strconv.FormatInt(time.Now().Unix(), 10)
 	return newName + "-" + filename
