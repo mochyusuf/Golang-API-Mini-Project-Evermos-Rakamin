@@ -5,6 +5,15 @@
 >
 > **Nama: Mochamad Yusuf**
 
+Ini adalah proyek yang dibangun sebagai bagian dari rakamin. REST API dasar menggunakan Go (Golang) dengan framework Fiber dan GORM sebagai ORM untuk berinteraksi dengan database MySQL.
+
+## Tech Stack
+- Go + Fiber v2
+- GORM (MySQL)
+- JWT (HS256)
+- Swagger (swaggo + gofiber/swagger)
+- Migrations SQL (folder `./migrations`)
+
 Ketentuan
 1. Harus memiliki routing seperti collection berikut https://github.com/Fajar-Islami/go-example-cruid/blob/master/Rakamin%20Evermos%20Virtual%20Internship.postman_collection.json
 2. Boleh menambahkan dari API yang sudah tapi tidak boleh dikurangi
@@ -25,6 +34,15 @@ Ketentuan
 17. Tabel log produk digunakan untuk menyimpan data produk yang ada di transaksi
 18. Menerapkan clean architecture
 
+## Fitur Utama (Modules)
+- Auth: login, register
+- Users: profil, alamat kirim
+- Toko: profil toko, update toko (upload foto)
+- Product: CRUD dengan upload foto
+- Category: CRUD (admin only)
+- Address: list provinces/cities (EMSIFA API + caching)
+- Transaction/Trx: list, detail, create
+
 Sumber Daya :
 1. Untuk mendapatkan data wilayah dapat menggunakan link berikut.
 https://www.emsifa.com/api-wilayah-indonesia/
@@ -32,3 +50,8 @@ https://www.emsifa.com/api-wilayah-indonesia/
 https://levelup.gitconnected.com/build-a-rest-api-using-go-mysql-gorm-and-mux-a02e
 9a2865ee
 3. Berikut design database https://drive.google.com/file/d/1L7pzFNjMNfUU-f3tsrZPKTjMpbIGaodW/view?usp=sharing
+
+## How to run
+1. Rename `.env.example` to `.env` and fill the data.
+2. Run `go run app/main.go`.
+3. And app will run on port `8000`.
