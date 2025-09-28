@@ -4,7 +4,6 @@ import (
 	"evermos_rakamin/internal/dto"
 	"evermos_rakamin/internal/entity"
 	"context"
-    "fmt"
 
 	"gorm.io/gorm"
 )

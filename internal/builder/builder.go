@@ -33,7 +33,11 @@ func BuildPrivateRoutes(db *gorm.DB, cfg *config.Config) []*router.Route {
 	produkService := service.NewProdukService(produkRepository, fotoRepository)
 	produkHandler := handler.NewProdukHandler(produkService)
 	
-	return router.PrivateRoutes(userHandler, alamatHandler, tokoHandler, categoryHandler, produkHandler)
+	trxRepository := repository.NewTrxRepository(db)
+	trxService := service.NewTrxService(cfg, trxRepository)
+	trxHandler := handler.NewTrxHandler(trxService)	
+
+	return router.PrivateRoutes(userHandler, alamatHandler, tokoHandler, categoryHandler, produkHandler, trxHandler)
 }
 
 func BuildPublicRoutes(db *gorm.DB, cfg *config.Config) []*router.Route {
