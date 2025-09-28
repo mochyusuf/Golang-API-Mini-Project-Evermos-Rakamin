@@ -48,12 +48,12 @@ func BuildPublicRoutes(db *gorm.DB, cfg *config.Config) []*router.Route {
 	
 	authService := service.NewAuthService(cfg, userRepository, tokoRepository)
 	userService := service.NewUserService(cfg, userRepository)
-
+	proxyHandler := handler.NewProxyHandler()
 
 	// Initialize handlers
 
 	authHandler := handler.NewAuthHandler(authService)
 	userHandler := handler.NewUserHandler(userService)
 
-	return router.PublicRoutes(authHandler, userHandler)
+	return router.PublicRoutes(authHandler, userHandler, proxyHandler)
 }
